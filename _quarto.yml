@@ -4,7 +4,7 @@ project:
 website:
   title: "JavaScript Crash Course"
   reader-mode: true
-  google-analytics: ${{env.ANALYTICS}}
+  google-analytics: G-XQYX8L5B43
   twitter-card:
     creator: "@sulovedahal"
 
