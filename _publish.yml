@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: da84a053-7f9f-4a25-95ab-c0c38da062bd
+      url: 'https://quartopub.com/sites/sulove/javascript-crash-course'

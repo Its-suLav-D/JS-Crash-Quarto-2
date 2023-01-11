@@ -1,0 +1,4 @@
+---
+title: "JavaScript Crash Course"
+---
+{{<  include modern.qmd >}}

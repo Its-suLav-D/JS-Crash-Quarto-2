@@ -1,0 +1,11 @@
+{
+  "hash": "5771f0a27f9c66653d0a08e6c4777b33",
+  "result": {
+    "markdown": "---\ntitle: Array\n---  \n\nIn JavaScript, an array is an ordered collection of data items, which can be of any data type. Arrays are a very useful data structure in programming, and they are used to store and manage large amounts of data efficiently.\n\nThere are bunch of ways to create an array in javascript. Below are some of the examples to acheive it.\n\n\n```{js}\n\nconst arr = [10] \n\n// The Array constructor is a function that creates and initializes an array object. It is used to create an array with a specified length, or to create an array from an array-like object or iterable.\n\nconst arr = Array(341) // Create empty Array [ <341 empty items> ]\nconst arr = Array(341, 2) // Creates Array of length 2 [341, 2]\nconst arr = new Array(341)\n\nconst arr = ['CSE'] \nconst arr = Array('CSE') // Creats Array of length 1 ['CSE']\nconst arr = new Array('CSE', 'Love') // Creeats Array of length 2 ['CSE', 'Love']\n\n```\n\n",
+    "supporting": [
+      "array_files/figure-html"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

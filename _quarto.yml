@@ -1,0 +1,129 @@
+project:
+  type: website
+
+website:
+  title: "JavaScript Crash Course"
+  reader-mode: true
+  twitter-card:
+    creator: "@sulovedahal"
+
+  sidebar:
+    subtitle: Developer
+    style: "docked"
+    search: true
+    background: light
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            url: https://code.com
+          - text: Report a Bug
+            url: https://bugs.com
+    contents:
+      - section: "Basics"
+        contents:
+          - basic.qmd
+      - section: "Variables and Scoping"
+        contents:
+          - variables.qmd
+
+      - section: "Equality and Type"
+        contents:
+          - equality.qmd
+
+      - section: "Array"
+        contents:
+          - array.qmd
+
+      - section: "Object"
+        contents:
+          - Object.qmd
+
+      - section: "Function"
+        contents:
+          - function.qmd
+
+      - section: "Class"
+        contents:
+          - class.qmd
+      - section: "DOM Manipluation"
+        contents:
+          - dom.qmd
+
+      - section: "Modern JavaScript"
+        contents:
+          - modern.qmd
+
+      - section: "Event Driven Programming"
+        contents:
+          - event.qmd
+
+      - section: "Promises"
+        contents:
+          - promise.qmd
+
+      - section: "Working with HTTP Request"
+        contents:
+          - network.qmd
+
+      - section: "Modules"
+        contents:
+          - module.qmd
+
+      - section: "Generators"
+        contents:
+          - generator.qmd
+
+      - section: "Browser Storage"
+        contents:
+          - browserStorage.qmd
+
+      - section: "Timer and Interval"
+        contents:
+          - timer.qmd
+
+      - section: "Web Workers"
+        contents:
+          - worker.qmd
+
+      - section: "Design Patterns"
+        contents:
+          - creational.qmd
+  cookie-consent: true
+
+  page-footer:
+    left: "Copyright 2023, Sulove Dahal"
+    right:
+      - icon: github
+        href: https://github.com/
+      - icon: twitter
+        href: https://twitter.com/
+
+freeze: true
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    number-sections: false
+    html-math-method: katex
+    code-fold: true
+    code-summary: "Show the code"
+    code-line-numbers: false
+    code-overflow: wrap
+    code-copy: hover
+    smooth-scroll: true
+    anchor-sections: true
+    fig-cap-location: margin
+    reference-location: margin
+    footnotes-hover: true
+    citations-hover: true
+    code-tools:
+      source: false
+      toggle: true
+      caption: See code

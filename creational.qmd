@@ -1,0 +1,417 @@
+---
+title: "Creational"
+
+---
+
+
+
+# Builder Pattern
+
+The builder pattern is a type of creational pattern that helps in building complex objects using simpler objects. It provides a flexible and step-by-step approach towards making these objects. It also keeps the representation and process of creation shielded.
+
+
+Consider the example of a restaurant that has to build a meal for its customers. The building process has various stages:
+
+1. The customer comes in and places an orders for a meal to the cashier
+
+2. The cashier forwards the order to the crew member (the builder) who makes the order
+
+3. The builder assembles the meal consisting of the burger, fries, and soda of choice
+
+4. The cashier receives the final meal from the builder
+
+5. The customer receives the final order from the cashier
+
+Every meal ordered by the customer regardless of the choices for the burger, fries, and soda will follow the same process. As you can see, a complex object is created following a step-by-step process.
+
+```{.js}
+function Meal() {
+  this.make = function(builder){
+    builder.step1();
+    builder.step2();
+    builder.step3();
+    builder.step4();
+    return builder.get();
+  }
+}
+function MealBuilder(pattie,side,soda) {
+   this.meal = null;
+   this.step1 = function() {
+        this.meal = new Order();
+    };
+    this.step2 = function() {
+        this.meal.addBurger(pattie);
+    };
+    this.step3 = function(){
+      this.meal.addSide(side);
+    }
+    this.step4 = function(){
+      this.meal.addSoda(soda);
+    }
+    this.get = function() {
+        return this.meal;
+    };
+}
+function Order() {
+    this.burger = null;
+    this.side = null;
+    this.soda = null;
+    this.addBurger = function(pattie) {
+        this.burger = pattie;
+    };
+    this.addSide = function(side) {
+        this.side = side;
+    };
+    this.addSoda = function(soda){
+      this.soda = soda;
+    }
+    this.display = function(){
+      console.log(`You meal has a ${this.burger} burger, ${this.side} on the side, and a ${this.soda}.`)
+    }
+}
+var meal = new Meal();
+var mealBuilder = new MealBuilder("chicken","curly fries","coke");
+var chickenBurgerMeal = meal.make(mealBuilder);
+chickenBurgerMeal.display();
+```
+
+---
+
+## When to use the builder pattern?
+
+You can use this design pattern when building apps that require you to create complex objects. It can help you hide the construction process of building these objects.
+
+A good example would be a DOM, where you might need to create plenty of nodes and attributes. The construction process can get quite messy if you are building a complex DOM object. In cases like these, the builder pattern can be used.
+
+## Gamma Categorization
+
+Gamma categorization is a software design pattern that involves organizing code into categories based on their level of abstraction. The pattern is named after Erich Gamma, one of the authors of the book "Design Patterns: Elements of Reusable Object-Oriented Software".
+
+The idea behind gamma categorization is to group code into categories based on their level of abstraction, with the most abstract code at the top and the most concrete code at the bottom. This can make it easier to understand the structure of a codebase and navigate between different levels of abstraction.
+
+Here's an example of how gamma categorization might be applied in JavaScript:
+
+```{.js
+// Most abstract
+class Document {
+  constructor(text) {
+    this.text = text;
+  }
+  getText() {
+    return this.text;
+  }
+}
+// Less abstract
+class DocumentViewer {
+  constructor(document) {
+    this.document = document;
+  }
+  display() {
+    console.log(this.document.getText());
+  }
+}
+class DocumentEditor {
+  constructor(document) {
+    this.document = document;
+  }
+  edit(text) {
+    this.document.text = text;
+  }
+}
+// Most concrete
+class FileDocument extends Document {
+  constructor(filePath) {
+    super();
+    this.filePath = filePath;
+  }
+  getText() {
+    // Read text from a file at the specified file path
+  }
+}
+class WebDocument extends Document {
+  constructor(url) {
+    super();
+    this.url = url;
+  }
+  getText() {
+    // Read text from a web page at the specified URL
+  }
+}
+```
+
+In this example, the most abstract code is at the top (the Document class), followed by the less abstract code (the DocumentViewer and DocumentEditor classes), and finally the most concrete code (the FileDocument and WebDocument classes).
+
+This organization makes it clear that the DocumentViewer and DocumentEditor classes depend on the abstract Document class, and that the FileDocument and WebDocument classes are concrete implementations of the Document class.
+
+## BUILDER DESIGN PATTERN
+
+The builder design pattern is a software design pattern that separates the construction of a complex object from its representation, allowing you to construct the object step by step. This can be useful when you need to create an object that has a large number of possible configurations or when you want to separate the construction of an object from the code that uses it.
+
+Here's an example of how the builder design pattern might be applied in JavaScript:
+
+```{.js
+class User {
+  constructor(builder) {
+    this.name = builder.name;
+    this.email = builder.email;
+    this.age = builder.age;
+    this.phone = builder.phone;
+    this.address = builder.address;
+  }
+}
+class UserBuilder {
+  constructor(name) {
+    this.name = name;
+  }
+  withEmail(email) {
+    this.email = email;
+    return this;
+  }
+  withAge(age) {
+    this.age = age;
+    return this;
+  }
+  withPhone(phone) {
+    this.phone = phone;
+    return this;
+  }
+  withAddress(address) {
+    this.address = address;
+    return this;
+  }
+  build() {
+    return new User(this);
+  }
+}
+const user = new UserBuilder('John')
+  .withEmail('john@example.com')
+  .withAge(30)
+  .withPhone('123-456-7890')
+  .withAddress('123 Main St.')
+  .build();
+console.log(user);
+// Output: User { name: 'John', email: 'john@example.com', age: 30, phone: '123-456-7890', address: '123 Main St.' }
+```
+
+## Builder Facet
+
+In the context of the builder design pattern in JavaScript, a "facet" is a property or feature of an object that can be constructed using the builder pattern. For example, in the previous examples, the User and Product classes had several facets (such as name, email, age, price, description, color, and size) that could be set using the UserBuilder and ProductBuilder classes, respectively.
+
+The builder pattern allows you to construct an object with a large number of facets in a flexible and modular way. You can set each facet separately, and you can choose which facets to set and which to leave unset. This can be useful when you need to create an object with a large number of possible configurations.
+
+```{.js
+class Product {
+  constructor(builder) {
+    this.name = builder.name;
+    this.price = builder.price;
+    this.description = builder.description;
+    this.color = builder.color;
+    this.size = builder.size;
+  }
+}
+class ProductBuilder {
+  constructor(name) {
+    this.name = name;
+  }
+  withPrice(price) {
+    this.price = price;
+    return this;
+  }
+  withDescription(description) {
+    this.description = description;
+    return this;
+  }
+  withColor(color) {
+    this.color = color;
+    return this;
+  }
+  withSize(size) {
+    this.size = size;
+    return this;
+  }
+  build() {
+    return new Product(this);
+  }
+}
+const product = new ProductBuilder('Shirt')
+  .withPrice(19.99)
+  .withDescription('A soft, comfortable shirt')
+  .withColor('blue')
+  .withSize('XL')
+  .build();
+console.log(product);
+// Output: Product { name: 'Shirt', price: 19.99, description: 'A soft, comfortable shirt', color: 'blue', size: 'XL' }
+```
+
+# Factory Pattern
+
+The factory pattern is a creational pattern that provides a template that can be used to create objects. It is used in complex situations where the type of the object required varies and needs to be specified in each case.
+
+It does not use the new keyword directly to instantiate objects. This means it does not explicitly require the use of a constructor to create objects. Instead, it provides a generic interface that delegates the object creation responsibility to the corresponding subclass.
+
+```{.js}
+class IceCreamFactory {
+  constructor() {
+    this.createIcecream = function(flavor) {
+      let iceCream;
+      if (flavor === 'chocolate'){
+          iceCream = new Chocolate();
+      }
+      else if (flavor === 'mint'){
+          iceCream = new Mint();
+      }
+      else if (flavor === 'strawberry'){
+          iceCream = new Strawberry();
+      }
+      return iceCream;
+    };
+  }
+}
+class Chocolate {
+  constructor() {
+    this.icecreamFlavor = "chocolate";
+    this.message = function() {
+      return `You chose the ${this.icecreamFlavor} flavor.`;
+    };
+  }
+}
+class Mint {
+  constructor() {
+    this.icecreamFlavor = "mint";
+    this.message = function() {
+      return `You chose the ${this.icecreamFlavor} flavor.`;
+    };
+  }
+}
+class Strawberry{
+  constructor() {
+    this.icecreamFlavor = "strawberry";
+    this.message = function() {
+      return `You chose the ${this.icecreamFlavor} flavor.`;
+    };
+  }
+}
+// creating objects
+const iceCreamfactory = new IceCreamFactory();
+const chocolate = iceCreamfactory.createIcecream('chocolate');
+const mint = iceCreamfactory.createIcecream('mint');
+const strawberry = iceCreamfactory.createIcecream('strawberry');
+console.log(chocolate.message());
+console.log(mint.message());
+console.log(strawberry.message());
+```
+
+---
+
+## When to use the factory pattern?
+
+1. When the type of objects required cannot be anticipated beforehand
+
+2. When multiple objects that share similar characteristics need to be created
+
+3. When you want to generalize the object instantiation process since the object set up is complex in nature
+
+## Factory
+
+A component responsible solely for the wholesale(not piecewise) creation of objects. The factory method design pattern is a software design pattern that defines an interface for creating an object, but lets subclasses decide which class to instantiate. The factory method pattern allows a class to defer instantiation to subclasses.
+
+```{.js}
+class Document {
+  constructor(text) {
+    this.text = text;
+  }
+  getText() {
+    return this.text;
+  }
+}
+class DocumentFactory {
+  createDocument(type) {
+    if (type === 'txt') {
+      return new TxtDocument();
+    } else if (type === 'docx') {
+      return new DocxDocument();
+    } else {
+      throw new Error('Invalid document type');
+    }
+  }
+}
+class TxtDocument extends Document {
+  constructor() {
+    super();
+  }
+  getText() {
+    // Read text from a .txt file
+  }
+}
+class DocxDocument extends Document {
+  constructor() {
+    super();
+  }
+  getText() {
+    // Read text from a .docx file
+  }
+}
+const factory = new DocumentFactory();
+const txtDocument = factory.createDocument('txt');
+console.log(txtDocument.getText());
+const docxDocument = factory.createDocument('docx');
+console.log(docxDocument.getText());
+```
+
+## Abstract Factory
+
+The abstract factory design pattern is a software design pattern that provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+
+The abstract factory pattern is similar to the factory method pattern, but it allows you to create families of objects rather than just individual objects. This can be useful when you need to create a group of related objects that have a common theme or that can work together in some way.
+
+```{.js}
+class Document {
+  constructor(text) {
+    this.text = text;
+  }
+  getText() {
+    return this.text;
+  }
+}
+class DocumentFactory {
+  createDocument(type) {
+    if (type === 'txt') {
+      return new TxtDocument();
+    } else if (type === 'docx') {
+      return new DocxDocument();
+    } else {
+      throw new Error('Invalid document type');
+    }
+  }
+}
+class TxtDocument extends Document {
+  constructor() {
+    super();
+  }
+  getText() {
+    // Read text from a .txt file
+  }
+}
+class DocxDocument extends Document {
+  constructor() {
+    super();
+  }
+  getText() {
+    // Read text from a .docx file
+  }
+}
+class DocumentEditor {
+  constructor(documentFactory) {
+    this.documentFactory = documentFactory;
+  }
+  openDocument(type) {
+    return this.documentFactory.createDocument(type);
+  }
+}
+const factory = new DocumentFactory();
+const editor = new DocumentEditor(factory);
+const txtDocument = editor.openDocument('txt');
+console.log(txtDocument.getText());
+const docxDocument = editor.openDocument('docx');
+console.log(docxDocument.getText());
+```
