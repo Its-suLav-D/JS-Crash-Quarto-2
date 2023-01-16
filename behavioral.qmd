@@ -1,0 +1,552 @@
+---
+title: Behavioral Design Pattern 
+
+---
+
+# Algorithm Abstraction 
+
+Algorithm abstraction refers to the practice of breaking down a complex algorithm into smaller, more manageable parts that can be easily reused and recombined to create new solutions. This process of simplification allows developers to focus on specific components of the algorithm, making it easier to understand, modify and maintain. Additionally, it makes it possible to use the individual components to create new variations or solutions to different problems, making the development process more efficient and flexible.
+
+
+# Strategy Pattern 
+
+The strategy design pattern is a behavioral design pattern that allows an algorithm's behavior to be selected at runtime. It defines a family of algorithms, encapsulates each one, and makes them interchangeable. This allows the algorithm to be selected and changed dynamically, depending on the situation or context.
+
+In the strategy pattern, a class called the "context" holds a reference to a strategy object. The context class defines a common interface for the strategy objects, and the client code that uses the context class can work with any strategy object through this common interface.
+
+## Strategy Pattern in Simple Terms
+
+A strategy design pattern is like having a toolbox with different tools for different jobs. Imagine you need to build a house, and you have a hammer, a screwdriver, a saw, and a drill. Each tool is good for a specific job, like the hammer is good for hitting nails, the screwdriver is good for turning screws, the saw is good for cutting wood, and the drill is good for making holes.
+
+So, if you need to build a house, you might use the hammer to put nails in the wood, the saw to cut the wood to the right size, the screwdriver to put the screws in and the drill to make holes for the pipes.
+
+This is similar to how a computer program can use different ways of doing things depending on what it needs to do. Just like how you choose the right tool for the job, the program can choose the right strategy for the task.
+
+
+## Components of the Strategy Pattern
+
+The strategy pattern consists of several components that work together to allow an algorithm's behavior to be selected and changed dynamically:
+
+1.  The strategy interface defines a common interface for all the strategy objects. This interface defines the methods that the strategy objects must implement.
+
+2.  The concrete strategy classes implement the strategy interface and define specific algorithms or behaviors. These classes are interchangeable and can be selected and changed at runtime.
+
+3.  The context class holds a reference to a strategy object and defines a common interface for the client code to interact with the strategy objects. The context class delegates the task to the strategy object it holds.
+
+4.  The client code is the code that uses the context class and the strategy objects. The client code can work with any strategy object through the common interface defined by the context class, without needing to know the details of the concrete strategy classes.
+
+5.  The strategy factory creates the strategy objects and assigns them to the context class. This factory can create multiple strategy objects and allows the client code to switch between them.
+
+Overall, the strategy pattern allows for the separation of concerns, making the code more flexible, maintainable, and reusable.
+
+## Example 
+
+```{.js}
+// Define the strategy interface
+class Strategy {
+    execute() {
+        throw new Error("This method must be implemented");
+    }
+}
+
+// Define concrete strategy classes
+class ConcreteStrategyA extends Strategy {
+    execute() {
+        console.log("Executing strategy A");
+    }
+}
+
+class ConcreteStrategyB extends Strategy {
+    execute() {
+        console.log("Executing strategy B");
+    }
+}
+
+class ConcreteStrategyC extends Strategy {
+    execute() {
+        console.log("Executing strategy C");
+    }
+}
+
+// Define the context class
+class Context {
+    constructor(strategy) {
+        this.strategy = strategy;
+    }
+
+    setStrategy(strategy) {
+        this.strategy = strategy;
+    }
+
+    executeStrategy() {
+        this.strategy.execute();
+    }
+}
+
+// Client code
+const context = new Context(new ConcreteStrategyA());
+context.executeStrategy(); // Output: "Executing strategy A"
+
+context.setStrategy(new ConcreteStrategyB());
+context.executeStrategy(); // Output: "Executing strategy B"
+
+context.setStrategy(new ConcreteStrategyC());
+context.executeStrategy(); // Output: "Executing strategy C"
+
+
+```
+
+## A Real-World Example of the Strategy Pattern
+
+A real-world example of the strategy pattern might be an e-commerce website that allows customers to choose different shipping options at checkout. The website might have several shipping options, such as standard shipping, express shipping, and overnight shipping. Each shipping option has different costs, delivery times, and requirements.
+
+
+
+```{.js}
+// Define the strategy interface
+class ShippingStrategy {
+    calculateCost() {
+        throw new Error("This method must be implemented");
+    }
+
+    deliveryTime() {
+        throw new Error("This method must be implemented");
+    }
+
+    getDescription() {
+        throw new Error("This method must be implemented");
+    }
+}
+
+// Define concrete strategy classes
+class StandardShipping extends ShippingStrategy {
+    calculateCost() {
+        return 5;
+    }
+
+    deliveryTime() {
+        return "5-7 business days";
+    }
+
+    getDescription() {
+        return "Standard Shipping";
+    }
+}
+
+class ExpressShipping extends ShippingStrategy {
+    calculateCost() {
+        return 10;
+    }
+
+    deliveryTime() {
+        return "2-3 business days";
+    }
+
+    getDescription() {
+        return "Express Shipping";
+    }
+}
+
+class OvernightShipping extends ShippingStrategy {
+    calculateCost() {
+        return 20;
+    }
+
+    deliveryTime() {
+        return "Next business day";
+    }
+
+    getDescription() {
+        return "Overnight Shipping";
+    }
+}
+
+// Define the context class
+class Order {
+    constructor(shippingStrategy) {
+        this.shippingStrategy = shippingStrategy;
+        this.items = [];
+    }
+
+    setShippingStrategy(shippingStrategy) {
+        this.shippingStrategy = shippingStrategy;
+    }
+
+    addItem(item) {
+        this.items.push(item);
+    }
+
+    calculateTotalCost() {
+        let cost = 0;
+        for (let item of this.items) {
+            cost += item.price;
+        }
+        return cost + this.shippingStrategy.calculateCost();
+    }
+
+    getShippingDescription() {
+        return this.shippingStrategy.getDescription();
+    }
+
+    getDeliveryTime() {
+        return this.shippingStrategy.deliveryTime();
+    }
+}
+
+// Client code
+const order = new Order(new StandardShipping());
+console.log("Shipping Description: ", order.getShippingDescription());
+console.log("Delivery Time: ", order.getDeliveryTime());
+console.log("Total Cost: ", order.calculateTotalCost());
+
+order.setShippingStrategy(new ExpressShipping());
+console.log("Shipping Description: ", order.getShippingDescription());
+console.log("Delivery Time: ", order.getDeliveryTime());
+console.log("Total Cost: ", order.calculateTotalCost());
+
+order.setShippingStrategy(new OvernightShipping());
+console.log("Shipping Description: ", order.getShippingDescription());
+console.log("Delivery Time: ", order.getDeliveryTime());
+console.log("Total Cost: ", order.calculateTotalCost());
+
+```
+
+
+## Another Example of the Strategy Pattern
+
+```{.js}
+
+let OutputFormat = Object.freeze({
+  markdown: 0,
+  html: 1
+});
+
+class ListStrategy
+{
+  start(buffer) {}
+  end(buffer) {}
+  addListItem(buffer, item) {}
+}
+
+class MarkdownListStrategy extends ListStrategy
+{
+  addListItem(buffer, item) {
+    buffer.push(` * ${item}`);
+  }
+}
+
+class HtmlListStrategy extends ListStrategy
+{
+  start(buffer) {
+    buffer.push('<ul>');
+  }
+
+  end(buffer)
+  {
+    buffer.push('</ul>');
+  }
+
+  addListItem(buffer, item) {
+    buffer.push(`  <li>${item}</li>`)
+  }
+}
+
+class TextProcessor
+{
+  constructor(outputFormat)
+  {
+    this.buffer = [];
+    this.setOutputFormat(outputFormat);
+  }
+
+  setOutputFormat(format)
+  {
+    switch (format)
+    {
+      case OutputFormat.markdown:
+        this.listStrategy = new MarkdownListStrategy();
+        break;
+      case OutputFormat.html:
+        this.listStrategy = new HtmlListStrategy();
+        break;
+    }
+  }
+
+  appendList(items)
+  {
+    this.listStrategy.start(this.buffer);
+    for (let item of items)
+      this.listStrategy.addListItem(this.buffer, item);
+    this.listStrategy.end(this.buffer);
+  }
+
+  clear()
+  {
+    this.buffer = [];
+  }
+
+  toString()
+  {
+    return this.buffer.join('\n');
+  }
+}
+
+let tp = new TextProcessor();
+tp.setOutputFormat(OutputFormat.markdown);
+tp.appendList(['foo', 'bar', 'baz']);
+console.log(tp.toString());
+
+tp.clear();
+tp.setOutputFormat(OutputFormat.html);
+tp.appendList(['alpha', 'beta', 'gamma']);
+console.log(tp.toString());
+
+```
+
+
+
+
+
+## Appropriate Scenario to Use the Strategy Pattern
+
+The strategy pattern should be used when you have a set of related algorithms or behaviors that are interchangeable, and you want to be able to select and change the behavior at runtime. Some common scenarios where the strategy pattern is useful include:
+
+1. You have a class that needs to perform one of several related algorithms, and you want to encapsulate the algorithms as objects to make the class more flexible and maintainable.
+
+2. You want to be able to add new algorithms or behaviors to a system without modifying the existing code.
+
+3. You want to be able to switch between different algorithms or behaviors at runtime, depending on the situation or context.
+
+4. You want to encapsulate a class that uses a large number of conditional statements and make it more readable and maintainable
+
+5. You have a algorithm that has multiple variations and you want to encapsulate each variation and make it interchangeable with other variations.
+
+In general, the strategy pattern is a powerful tool for creating flexible, reusable, and maintainable code, and it can help to simplify complex systems by breaking them down into smaller, more manageable parts.
+
+
+
+# Template Method Design Pattern 
+
+The template method pattern is a behavioral design pattern that defines the skeleton of an algorithm in a method, called the template method, and allows subclasses to fill in the details. It defines a general way to execute a series of steps, but allows subclasses to provide specific implementations for some or all of the steps.
+
+The template method pattern is often used when you have a series of steps that must be executed in a specific order, but some of the steps may vary depending on the situation or context. By using the template method pattern, you can define the overall structure of the algorithm in a base class, and then let subclasses fill in the details.
+
+## Template Method in Simple Term
+
+The template method pattern is like a recipe for making something. Imagine you want to make a cake, and you have a recipe that tells you the steps to make it. The recipe is like a template, it tells you the order of the steps, but not all the details of how to do each step.
+
+For example, the recipe might say "Mix the ingredients together", but it doesn't tell you exactly how to mix them. You can use a spoon or a mixer, or you can mix them by hand. The recipe just tells you the general way to do it, but you can choose the specific details.
+
+This is similar to how computer programs can use a template method to do a series of steps in a specific order, but some of the steps might be different depending on the situation. Just like how you can choose the specific details of how to mix the ingredients in a recipe, the program can choose the specific details of how to do each step.
+
+
+## Template Method Example
+
+```{.js}
+
+class AbstractClass {
+    templateMethod() {
+        this.step1();
+        this.step2();
+        this.step3();
+    }
+
+    step1() {
+        console.log("step1 (AbstractClass)");
+    }
+
+    step2() {
+        console.log("step2 (AbstractClass)");
+    }
+
+    step3() {
+        console.log("step3 (AbstractClass)");
+    }
+}
+
+class ConcreteClass extends AbstractClass {
+    step2() {
+        console.log("step2 (ConcreteClass)");
+    }
+}
+
+// Client code
+const concreteClass = new ConcreteClass();
+concreteClass.templateMethod();
+/* Output:
+step1 (AbstractClass)
+step2 (ConcreteClass)
+step3 (AbstractClass)
+*/
+
+```
+
+## Real World Example of the Template Method Pattern
+
+A real-world example of the template method pattern in JavaScript might be a web application that allows users to create custom reports. The application might have a base class that defines a template method for creating a report, which includes several common steps such as querying the database, formatting the data, and generating the final report.
+
+```{.js}
+class ReportTemplate {
+    generateReport(reportData) {
+        this.fetchData(reportData);
+        this.formatData();
+        this.generateOutput();
+    }
+
+    fetchData(reportData) {
+        console.log("Fetching data from database (ReportTemplate)");
+    }
+
+    formatData() {
+        console.log("Formatting data (ReportTemplate)");
+    }
+
+    generateOutput() {
+        console.log("Generating final report (ReportTemplate)");
+    }
+}
+
+class SalesReport extends ReportTemplate {
+    fetchData(reportData) {
+        console.log("Fetching sales data from database (SalesReport)");
+    }
+}
+
+class InventoryReport extends ReportTemplate {
+    fetchData(reportData) {
+        console.log("Fetching inventory data from database (InventoryReport)");
+    }
+}
+
+// Client code
+const salesReport = new SalesReport();
+salesReport.generateReport();
+// Output:
+// Fetching sales data from database (SalesReport)
+// Formatting data (ReportTemplate)
+// Generating final report (ReportTemplate)
+
+const inventoryReport = new InventoryReport();
+inventoryReport.generateReport();
+// Output:
+// Fetching inventory data from database (InventoryReport)
+// Formatting data (ReportTemplate)
+// Generating final report (ReportTemplate)
+
+```
+
+Another common scenario where the template method pattern is used is in building a financial application. For example, an application that manages investment portfolios. The application might have a base class that defines a template method for calculating the return on investment (ROI) of a portfolio, which includes several common steps such as fetching the portfolio data, calculating the returns and generating the final report.
+
+```{.js}
+class ROICalculator {
+    calculateROI(portfolio) {
+        this.fetchData(portfolio);
+        this.calculateReturns();
+        this.generateReport();
+    }
+
+    fetchData(portfolio) {
+        // Fetch data from the portfolio
+    }
+
+    calculateReturns() {
+        // Calculate returns on the portfolio
+    }
+
+    generateReport() {
+        // Generate final report
+    }
+}
+
+class StockPortfolio extends ROICalculator {
+    fetchData(portfolio) {
+        // Fetch stock data for the portfolio
+    }
+}
+
+class RealEstatePortfolio extends ROICalculator {
+    fetchData(portfolio) {
+        // Fetch real estate data for the portfolio
+    }
+}
+
+```
+
+Last Example:
+
+```{.js}
+class Game {
+  constructor(numberOfPlayers)
+  {
+    this.numberOfPlayers = numberOfPlayers;
+    this.currentPlayer = 0;
+  }
+
+  run() {
+    this.start();
+    while (!this.haveWinner) {
+      this.takeTurn();
+    }
+    console.log(`Player ${this.winningPlayer} wins.`);
+  }
+
+  start(){}
+  get haveWinner(){}
+  takeTurn(){}
+  get winningPlayer(){}
+}
+
+class Chess extends Game
+{
+  constructor()
+  {
+    super(2);
+    this.maxTurns = 10;
+    this.turn = 1;
+  }
+
+  start()
+  {
+    console.log(
+      `Starting a game of chess with ${this.numberOfPlayers} players.`
+    );
+  }
+
+  get haveWinner()
+  {
+    return this.turn === this.maxTurns;
+  }
+
+  takeTurn() {
+    console.log(
+      `Turn ${this.turn++} taken by player ${this.currentPlayer}.`
+    );
+    this.currentPlayer = (this.currentPlayer + 1) % this.numberOfPlayers;
+  }
+
+  get winningPlayer()
+  {
+    return this.currentPlayer;
+  }
+}
+
+let chess = new Chess();
+chess.run();
+
+``` 
+
+## Applicability
+
+The template method pattern is an appropriate solution when you have an algorithm with a fixed structure that needs to be executed in a specific order, but one or more of the steps might vary depending on the situation or context. Some common scenarios where the template method pattern is used include:
+
+1. You have a process that needs to be executed in a specific order, but some of the steps might vary depending on the situation or context. For example, a financial application that calculates the return on investment (ROI) of a portfolio may need to fetch data, calculate returns and generate a report, but the data fetching process may vary depending on the type of portfolio.
+
+2. You want to allow subclasses to provide specific implementations for one or more of the steps of the algorithm, while still ensuring that the overall structure of the algorithm remains the same.
+
+3. You want to encapsulate a complex algorithm in a single method and make it reusable across different classes and situations.
+
+4. You have a framework that needs to be customized for different use cases, but the overall structure of the framework should remain the same.
+
+5. You want to be able to add new functionality to a system without modifying existing code.
+
+In general, the template method pattern is a powerful tool for creating flexible, reusable, and maintainable code, and it can help to simplify complex systems by breaking them down into smaller, more manageable parts.

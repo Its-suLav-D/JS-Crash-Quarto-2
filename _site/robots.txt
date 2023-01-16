@@ -1,1 +1,1 @@
-Sitemap: https://quartopub.com/sites/sulove/javascript-crash-course/sitemap.xml
+Sitemap: https://Its-suLav-D.github.io/JS-Crash-Quarto-2/sitemap.xml

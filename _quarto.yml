@@ -90,6 +90,20 @@ website:
       - section: "Design Patterns"
         contents:
           - creational.qmd
+          - behavioral.qmd
+
+      - section: "Data Structures"
+
+      - section: "Algorithms"
+
+      - section: "FrontEnd Interview"
+
+      - section: "Object Oriented Design"
+
+      - section: "Project Ideas"
+
+
+
   cookie-consent: true
 
   page-footer:
