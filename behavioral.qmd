@@ -304,8 +304,115 @@ console.log(tp.toString());
 ```
 
 
+```{.js} 
+class FlyingStrategy {
+    draw() { /* code to draw the bird */ }
+    advance() { /* code to make the bird advance */ }
+}
 
+class StandardFlying extends FlyingStrategy {
+    draw() { /* code to draw a standard bird */ }
+    advance() { /* code to make a standard bird advance */ }
+}
 
+class FloaterFlying extends FlyingStrategy {
+    draw() { /* code to draw a floater bird */ }
+    advance() { /* code to make a floater bird advance */ }
+}
+
+class CrazyFlying extends FlyingStrategy {
+    draw() { /* code to draw a crazy bird */ }
+    advance() { /* code to make a crazy bird advance */ }
+}
+
+class SinkerFlying extends FlyingStrategy {
+    draw() { /* code to draw a sinker bird */ }
+    advance() { /* code to make a sinker bird advance */ }
+}
+
+class Bird {
+    constructor(radius = 1.0, points = 0) {
+        this.dead = false;
+        this.radius = radius;
+        this.points = points;
+        this.flyingStrategy = null;
+    }
+
+    setFlyingStrategy(strategy) {
+        this.flyingStrategy = strategy;
+    }
+
+    get isDead() {
+        return this.dead;
+    }
+
+    get position() {
+        return this.pt;
+    }
+
+    get velocity() {
+        return this.v;
+    }
+
+    get radius() {
+        return this.radius;
+    }
+
+    get points() {
+        return this.points;
+    }
+
+    get isOutOfBounds() {
+        return (this.pt.x < -this.radius || this.pt.x >= dimensions.x + this.radius ||
+                this.pt.y < -this.radius || this.pt.y >= dimensions.y + this.radius);
+    }
+
+    kill() {
+        this.dead = true;
+    }
+
+    draw() {
+        this.flyingStrategy.draw();
+    }
+
+    advance() {
+        this.flyingStrategy.advance();
+    }
+}
+
+class Standard extends Bird {
+    constructor(radius = 25.0, speed = 5.0, points = 10) {
+        super(radius, points);
+        this.setFlyingStrategy(new StandardFlying());
+        // other initialization code here
+    }
+}
+
+class Floater extends Bird {
+    constructor(radius = 30.0, speed = 5.0, points = 15) {
+        super(radius, points);
+        this.setFlyingStrategy(new FloaterFlying());
+        // other initialization code here
+    }
+}
+
+class Crazy extends Bird {
+    constructor(radius = 30.0, speed = 4.5, points = 30) {
+        super(radius, points);
+        this.setFlyingStrategy(new CrazyFlying());
+        // other initialization code here
+    }
+}
+
+class Sinker extends Bird {
+    constructor(radius = 30.0, speed = 4.5, points = 20) {
+        super(radius, points);
+        this.setFlyingStrategy(new SinkerFlying());
+        // other initialization code here
+    }
+}
+
+```
 
 ## Appropriate Scenario to Use the Strategy Pattern
 
