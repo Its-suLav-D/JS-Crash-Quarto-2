@@ -526,6 +526,25 @@ cookieconsent.run({
   <li><a href="#real-world-example-of-the-template-method-pattern" id="toc-real-world-example-of-the-template-method-pattern" class="nav-link" data-scroll-target="#real-world-example-of-the-template-method-pattern">Real World Example of the Template Method Pattern</a></li>
   <li><a href="#applicability" id="toc-applicability" class="nav-link" data-scroll-target="#applicability">Applicability</a></li>
   </ul></li>
+  <li><a href="#message-passing-design" id="toc-message-passing-design" class="nav-link" data-scroll-target="#message-passing-design">Message Passing Design</a>
+  <ul class="collapse">
+  <li><a href="#mediator" id="toc-mediator" class="nav-link" data-scroll-target="#mediator">Mediator</a>
+  <ul class="collapse">
+  <li><a href="#example-2---mediator" id="toc-example-2---mediator" class="nav-link" data-scroll-target="#example-2---mediator">Example 2 - Mediator</a></li>
+  <li><a href="#example-3---mediator" id="toc-example-3---mediator" class="nav-link" data-scroll-target="#example-3---mediator">Example 3 - Mediator</a></li>
+  </ul></li>
+  <li><a href="#chain-of-responsibility" id="toc-chain-of-responsibility" class="nav-link" data-scroll-target="#chain-of-responsibility">Chain of Responsibility</a>
+  <ul class="collapse">
+  <li><a href="#example-1---chain-of-responsibility" id="toc-example-1---chain-of-responsibility" class="nav-link" data-scroll-target="#example-1---chain-of-responsibility">Example 1 - Chain of Responsibility</a></li>
+  <li><a href="#example-2---chain-of-responsibility" id="toc-example-2---chain-of-responsibility" class="nav-link" data-scroll-target="#example-2---chain-of-responsibility">Example 2 - Chain of Responsibility</a></li>
+  </ul></li>
+  <li><a href="#observer-pattern" id="toc-observer-pattern" class="nav-link" data-scroll-target="#observer-pattern">Observer Pattern</a>
+  <ul class="collapse">
+  <li><a href="#example-2---observer-pattern" id="toc-example-2---observer-pattern" class="nav-link" data-scroll-target="#example-2---observer-pattern">Example 2 - Observer Pattern</a></li>
+  <li><a href="#example-3---observer-pattern" id="toc-example-3---observer-pattern" class="nav-link" data-scroll-target="#example-3---observer-pattern">Example 3 - Observer Pattern</a></li>
+  </ul></li>
+  <li><a href="#visitor-pattern" id="toc-visitor-pattern" class="nav-link" data-scroll-target="#visitor-pattern">Visitor Pattern</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -1144,6 +1163,588 @@ cookieconsent.run({
 <li><p>You want to be able to add new functionality to a system without modifying existing code.</p></li>
 </ol>
 <p>In general, the template method pattern is a powerful tool for creating flexible, reusable, and maintainable code, and it can help to simplify complex systems by breaking them down into smaller, more manageable parts.</p>
+</section>
+</section>
+<section id="message-passing-design" class="level1">
+<h1>Message Passing Design</h1>
+<p>The Message Passing Design Pattern is a software design pattern in which objects communicate with each other by sending and receiving messages. The message passing mechanism allows objects to send and receive data, triggers events, or request actions without the need for tight coupling or direct knowledge of the recipient’s implementation. This allows for loose coupling between objects and promotes modularity, maintainability, and scalability in software systems.</p>
+<section id="mediator" class="level2">
+<h2 class="anchored" data-anchor-id="mediator">Mediator</h2>
+<p>The Mediator Design Pattern is a behavioral design pattern that provides a centralized communication channel for objects to interact with each other in a decoupled way. In other words, objects don’t communicate directly with each other, but through a mediator object., which acts as an intermediary. This can lead to more flexible and maintainable design by reducing the number of relationships between objects and promoting loose coupling.</p>
+<p>For instance: Imaine that you have a group of friends who want to play a game together. But instead of each person talking to each other directly, you want to have a leader who helps everyone communicate and play the game together. This leader is like a helper who makes sure that everyone is on the same page and that everyone is having fun. This is the same concept as the mediator design pattern.</p>
+<p>So, when one of your friends wants to tell the others about something, they tell the leader instead of telling each other directly. The leader then tells the rest of the friends about the message. This way, everyone can play the game together smoothly and on one gets left out.</p>
+<p>In javaScript, this pattern can be implemented using an object that acts as a mediator, and that contains methods for registering and unregistering objects, as well as methods for sending and receiving messages.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> User {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">constructor</span>(name)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">chatroom</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sendMessage</span>(recipient<span class="op">,</span> message<span class="op">,</span> mediator)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        mediator<span class="op">.</span><span class="fu">sendMessage</span>(<span class="kw">this</span><span class="op">,</span> recipient<span class="op">,</span> message)<span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">ChatMediator</span>()</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">constructor</span>()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">users</span> <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">register</span>(user)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">users</span>[user<span class="op">.</span><span class="at">name</span>] <span class="op">=</span> user<span class="op">;</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">send</span>(sender<span class="op">,</span> recipient<span class="op">,</span> message)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">users</span><span class="op">.</span><span class="fu">includes</span>(sender) <span class="op">&amp;&amp;</span> <span class="kw">this</span><span class="op">.</span><span class="at">users</span><span class="op">.</span><span class="fu">includes</span>(recipient)) {</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span>sender<span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> sent message "</span><span class="sc">${</span>message<span class="sc">}</span><span class="vs">" to </span><span class="sc">${</span>recipient<span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Error: either sender or recipient is not registered`</span>)<span class="op">;</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> chatMediator <span class="op">=</span> <span class="kw">new</span> <span class="fu">ChatMediator</span>()<span class="op">;</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> userA <span class="op">=</span> <span class="kw">new</span> <span class="fu">User</span>(<span class="st">"User A"</span>)<span class="op">;</span></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> userB <span class="op">=</span> <span class="kw">new</span> <span class="fu">User</span>(<span class="st">"User B"</span>)<span class="op">;</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>chatMediator<span class="op">.</span><span class="fu">register</span>(userA)<span class="op">;</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>chatMediator<span class="op">.</span><span class="fu">register</span>(userB)<span class="op">;</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>userA<span class="op">.</span><span class="fu">sendMessage</span>(userB<span class="op">,</span> <span class="st">"Hello!"</span><span class="op">,</span> chatMediator)<span class="op">;</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>userB<span class="op">.</span><span class="fu">sendMessage</span>(userA<span class="op">,</span> <span class="st">"Hi there!"</span><span class="op">,</span> chatMediator)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="example-2---mediator" class="level3">
+<h3 class="anchored" data-anchor-id="example-2---mediator">Example 2 - Mediator</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Airplane {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sendLocation</span>(location<span class="op">,</span> mediator) {</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    mediator<span class="op">.</span><span class="fu">sendLocation</span>(<span class="kw">this</span><span class="op">,</span> location)<span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> FlightControlCenter {</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">airplanes</span> <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">register</span>(airplane) {</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">airplanes</span><span class="op">.</span><span class="fu">push</span>(airplane)<span class="op">;</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sendLocation</span>(airplane<span class="op">,</span> location) {</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span>airplane<span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> reported location: </span><span class="sc">${</span>location<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> flightControlCenter <span class="op">=</span> <span class="kw">new</span> <span class="fu">FlightControlCenter</span>()<span class="op">;</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> airplaneA <span class="op">=</span> <span class="kw">new</span> <span class="fu">Airplane</span>(<span class="st">"Airplane A"</span>)<span class="op">;</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> airplaneB <span class="op">=</span> <span class="kw">new</span> <span class="fu">Airplane</span>(<span class="st">"Airplane B"</span>)<span class="op">;</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>flightControlCenter<span class="op">.</span><span class="fu">register</span>(airplaneA)<span class="op">;</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>flightControlCenter<span class="op">.</span><span class="fu">register</span>(airplaneB)<span class="op">;</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>airplaneA<span class="op">.</span><span class="fu">sendLocation</span>(<span class="st">"37.788022, -122.399797"</span><span class="op">,</span> flightControlCenter)<span class="op">;</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>airplaneB<span class="op">.</span><span class="fu">sendLocation</span>(<span class="st">"51.509865, -0.118092"</span><span class="op">,</span> flightControlCenter)<span class="op">;</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="co">// Output:</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="co">// Airplane A reported location: 37.788022, -122.399797</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co">// Airplane B reported location: 51.509865,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-3---mediator" class="level3">
+<h3 class="anchored" data-anchor-id="example-3---mediator">Example 3 - Mediator</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">Participant</span>()</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">constructor</span>(name){</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">joinConference</span>(mediator) {</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        mediator<span class="op">.</span><span class="fu">register</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> joined the conference`</span>)<span class="op">;</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">leaveConference</span>(mediator) {</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        mediator<span class="op">.</span><span class="fu">unregister</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> left the conference`</span>)<span class="op">;</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">receiveMessage</span>(message<span class="op">,</span> <span class="im">from</span>) {</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> received message "</span><span class="sc">${</span>message<span class="sc">}</span><span class="vs">" from </span><span class="sc">${</span><span class="im">from</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> VideoConferencingSystem {</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">participants</span> <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">register</span>(participant) {</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">participants</span><span class="op">.</span><span class="fu">push</span>(participant)<span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unregister</span>(participant) {</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">participants</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">participants</span><span class="op">.</span><span class="fu">filter</span>(p <span class="kw">=&gt;</span> p <span class="op">!==</span> participant)<span class="op">;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sendMessage</span>(message<span class="op">,</span> <span class="im">from</span>) {</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">participants</span><span class="op">.</span><span class="fu">forEach</span>(participant <span class="kw">=&gt;</span> {</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (participant <span class="op">!==</span> <span class="im">from</span>) {</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>        participant<span class="op">.</span><span class="fu">receiveMessage</span>(message<span class="op">,</span> <span class="im">from</span>)<span class="op">;</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> videoConferencingSystem <span class="op">=</span> <span class="kw">new</span> <span class="fu">VideoConferencingSystem</span>()<span class="op">;</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> participantA <span class="op">=</span> <span class="kw">new</span> <span class="fu">Participant</span>(<span class="st">"Participant A"</span>)<span class="op">;</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> participantB <span class="op">=</span> <span class="kw">new</span> <span class="fu">Participant</span>(<span class="st">"Participant B"</span>)<span class="op">;</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> participantC <span class="op">=</span> <span class="kw">new</span> <span class="fu">Participant</span>(<span class="st">"Participant C"</span>)<span class="op">;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>participantA<span class="op">.</span><span class="fu">joinConference</span>(videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>participantB<span class="op">.</span><span class="fu">joinConference</span>(videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>participantC<span class="op">.</span><span class="fu">joinConference</span>(videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>participantA<span class="op">.</span><span class="fu">sendMessage</span>(<span class="st">"Hello everyone!"</span><span class="op">,</span> videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a>participantB<span class="op">.</span><span class="fu">sendMessage</span>(<span class="st">"Hi!"</span><span class="op">,</span> videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a>participantC<span class="op">.</span><span class="fu">sendMessage</span>(<span class="st">"Greetings!"</span><span class="op">,</span> videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>participantC<span class="op">.</span><span class="fu">leaveConference</span>(videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>participantA<span class="op">.</span><span class="fu">sendMessage</span>(<span class="st">"Bye!"</span><span class="op">,</span> videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>participantB<span class="op">.</span><span class="fu">sendMessage</span>(<span class="st">"Goodbye!"</span><span class="op">,</span> videoConferencingSystem)<span class="op">;</span></span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="chain-of-responsibility" class="level2">
+<h2 class="anchored" data-anchor-id="chain-of-responsibility">Chain of Responsibility</h2>
+<p>The Chain of Responsibility pattern is a design pattern where a request is passed through a chain of objects until one of them handles it. The objects in the chain are called “handlers”.</p>
+<p>The Chain of Responsibility pattern is useful when you want to decouple the sender of a request from its receiver. It also allows you to add new handlers to the chain without changing the existing code.</p>
+<blockquote class="blockquote">
+<p>Okay, let’s pretend you are playing a game of passing a ball to your friends. The ball starts with you, then you pass it to your friend, who then passes it to another friend, and so on, until one of your friends catches the ball.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>This is like the Chain of Responsibility pattern. The ball is like a request, and each of your friends is like a handler. The ball is passed from one friend to another until someone catches it and handles it.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>So, in this pattern, the request is passed along a chain of objects, and each object gets a chance to handle the request. If an object can’t handle it, it passes the request to the next object in the chain, until it is handled.</p>
+</blockquote>
+<section id="example-1---chain-of-responsibility" class="level3">
+<h3 class="anchored" data-anchor-id="example-1---chain-of-responsibility">Example 1 - Chain of Responsibility</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Request {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(amount) {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">amount</span> <span class="op">=</span> amount<span class="op">;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Payment {</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNext</span>(payment) {</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">next</span> <span class="op">=</span> payment<span class="op">;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">handle</span>(request) {</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="fu">canHandle</span>(request)) {</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">constructor</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> handled request of </span><span class="sc">${</span>request<span class="op">.</span><span class="at">amount</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">next</span>) {</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">next</span><span class="op">.</span><span class="fu">handle</span>(request)<span class="op">;</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">"Request not handled"</span>)<span class="op">;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PayPal <span class="kw">extends</span> Payment {</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">canHandle</span>(request) {</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> request<span class="op">.</span><span class="at">amount</span> <span class="op">&lt;</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Bank <span class="kw">extends</span> Payment {</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">canHandle</span>(request) {</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> request<span class="op">.</span><span class="at">amount</span> <span class="op">&gt;=</span> <span class="dv">100</span> <span class="op">&amp;&amp;</span> request<span class="op">.</span><span class="at">amount</span> <span class="op">&lt;</span> <span class="dv">1000</span><span class="op">;</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WesternUnion <span class="kw">extends</span> Payment {</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">canHandle</span>(request) {</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> request<span class="op">.</span><span class="at">amount</span> <span class="op">&gt;=</span> <span class="dv">1000</span><span class="op">;</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> paypal <span class="op">=</span> <span class="kw">new</span> <span class="fu">PayPal</span>()<span class="op">;</span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bank <span class="op">=</span> <span class="kw">new</span> <span class="fu">Bank</span>()<span class="op">;</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> westernUnion <span class="op">=</span> <span class="kw">new</span> <span class="fu">WesternUnion</span>()<span class="op">;</span></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>paypal<span class="op">.</span><span class="fu">setNext</span>(bank)<span class="op">;</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>bank<span class="op">.</span><span class="fu">setNext</span>(westernUnion)<span class="op">;</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> request1 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="dv">50</span>)<span class="op">;</span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>paypal<span class="op">.</span><span class="fu">handle</span>(request1)<span class="op">;</span> <span class="co">// PayPal handled request of 50</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> request2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="dv">150</span>)<span class="op">;</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>paypal<span class="op">.</span><span class="fu">handle</span>(request2)<span class="op">;</span> <span class="co">// Bank handled request of 150</span></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> request3 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="dv">2000</span>)<span class="op">;</span></span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>paypal<span class="op">.</span><span class="fu">handle</span>(request3)<span class="op">;</span> <span class="co">// WesternUnion handled request of 2000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-2---chain-of-responsibility" class="level3">
+<h3 class="anchored" data-anchor-id="example-2---chain-of-responsibility">Example 2 - Chain of Responsibility</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Request {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(type) {</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">type</span> <span class="op">=</span> type<span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Approver {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNext</span>(approver) {</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">next</span> <span class="op">=</span> approver<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">handle</span>(request) {</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="fu">canHandle</span>(request)) {</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">constructor</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> handled request of type: </span><span class="sc">${</span>request<span class="op">.</span><span class="at">type</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="kw">this</span><span class="op">.</span><span class="at">next</span>) {</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">next</span><span class="op">.</span><span class="fu">handle</span>(request)<span class="op">;</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>      <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">"Request not handled"</span>)<span class="op">;</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Manager <span class="kw">extends</span> Approver {</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">canHandle</span>(request) {</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> request<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">"leave"</span><span class="op">;</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Director <span class="kw">extends</span> Approver {</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">canHandle</span>(request) {</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> request<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">"salary increase"</span><span class="op">;</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> manager <span class="op">=</span> <span class="kw">new</span> <span class="fu">Manager</span>()<span class="op">;</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> director <span class="op">=</span> <span class="kw">new</span> <span class="fu">Director</span>()<span class="op">;</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span><span class="fu">setNext</span>(director)<span class="op">;</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> leaveRequest <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="st">"leave"</span>)<span class="op">;</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span><span class="fu">handle</span>(leaveRequest)<span class="op">;</span> <span class="co">// Manager handled request of type: leave</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> salaryIncreaseRequest <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="st">"salary increase"</span>)<span class="op">;</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span><span class="fu">handle</span>(salaryIncreaseRequest)<span class="op">;</span> <span class="co">// Director handled request of type: salary increase</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> otherRequest <span class="op">=</span> <span class="kw">new</span> <span class="fu">Request</span>(<span class="st">"other"</span>)<span class="op">;</span></span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>manager<span class="op">.</span><span class="fu">handle</span>(otherRequest)<span class="op">;</span> <span class="co">// Request not handled</span></span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="observer-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="observer-pattern">Observer Pattern</h2>
+<p>The Observer pattern is a design pattern where an object, called the subject, maintains a list of its dependents, called observers, and notifies them automatically of any changes to its state.</p>
+<p>A real-world example of the Observer pattern is a weather station. The weather station (subject) has a list of weather subscribers (observers). When the temperature, humidity or pressure changes, the weather station updates its measurements and notifies all its subscribers of the change. Each subscriber (e.g.&nbsp;a weather app, a TV channel) updates its display with the new information.</p>
+<p>Another example could be a stock market update system where a stock market data provider (subject) maintains a list of stock market subscribers (observers) such as stock market traders, brokers, and investors. When the stock market changes, the data provider updates its information and notifies all its subscribers of the changes. Each subscriber updates their stock portfolio and trading strategies based on the new information.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Subject {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subscribe</span>(observer) {</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">push</span>(observer)<span class="op">;</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unsubscribe</span>(observer) {</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">filter</span>(obs <span class="kw">=&gt;</span> obs <span class="op">!==</span> observer)<span class="op">;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">notify</span>(data) {</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">forEach</span>(observer <span class="kw">=&gt;</span> observer<span class="op">.</span><span class="fu">update</span>(data))<span class="op">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Observer {</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update</span>(data) {</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> received data: </span><span class="sc">${</span>data<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> subject <span class="op">=</span> <span class="kw">new</span> <span class="fu">Subject</span>()<span class="op">;</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> observer1 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Observer</span>(<span class="st">"Observer 1"</span>)<span class="op">;</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> observer2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Observer</span>(<span class="st">"Observer 2"</span>)<span class="op">;</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> observer3 <span class="op">=</span> <span class="kw">new</span> <span class="fu">Observer</span>(<span class="st">"Observer 3"</span>)<span class="op">;</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">subscribe</span>(observer1)<span class="op">;</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">subscribe</span>(observer2)<span class="op">;</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">subscribe</span>(observer3)<span class="op">;</span></span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">notify</span>(<span class="st">"Hello World"</span>)<span class="op">;</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="co">// Observer 1 received data: Hello World</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="co">// Observer 2 received data: Hello World</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="co">// Observer 3 received data: Hello World</span></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">unsubscribe</span>(observer2)<span class="op">;</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>subject<span class="op">.</span><span class="fu">notify</span>(<span class="st">"Hello Again"</span>)<span class="op">;</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="co">// Observer 1 received data: Hello Again</span></span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="co">// Observer 3 received data: Hello Again</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="example-2---observer-pattern" class="level3">
+<h3 class="anchored" data-anchor-id="example-2---observer-pattern">Example 2 - Observer Pattern</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WeatherStation {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">temperature</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">humidity</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">pressure</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subscribe</span>(observer) {</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">push</span>(observer)<span class="op">;</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unsubscribe</span>(observer) {</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">filter</span>(obs <span class="kw">=&gt;</span> obs <span class="op">!==</span> observer)<span class="op">;</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">notify</span>() {</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">forEach</span>(observer <span class="kw">=&gt;</span> {</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>      observer<span class="op">.</span><span class="fu">update</span>(<span class="kw">this</span><span class="op">.</span><span class="at">temperature</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="at">humidity</span><span class="op">,</span> <span class="kw">this</span><span class="op">.</span><span class="at">pressure</span>)<span class="op">;</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setMeasurements</span>(temperature<span class="op">,</span> humidity<span class="op">,</span> pressure) {</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">temperature</span> <span class="op">=</span> temperature<span class="op">;</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">humidity</span> <span class="op">=</span> humidity<span class="op">;</span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">pressure</span> <span class="op">=</span> pressure<span class="op">;</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">notify</span>()<span class="op">;</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WeatherApp {</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update</span>(temperature<span class="op">,</span> humidity<span class="op">,</span> pressure) {</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> received update:`</span>)<span class="op">;</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Temperature: </span><span class="sc">${</span>temperature<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Humidity: </span><span class="sc">${</span>humidity<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Pressure: </span><span class="sc">${</span>pressure<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> weatherStation <span class="op">=</span> <span class="kw">new</span> <span class="fu">WeatherStation</span>()<span class="op">;</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> weatherApp1 <span class="op">=</span> <span class="kw">new</span> <span class="fu">WeatherApp</span>(<span class="st">"Weather App 1"</span>)<span class="op">;</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> weatherApp2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">WeatherApp</span>(<span class="st">"Weather App 2"</span>)<span class="op">;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>weatherStation<span class="op">.</span><span class="fu">subscribe</span>(weatherApp1)<span class="op">;</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>weatherStation<span class="op">.</span><span class="fu">subscribe</span>(weatherApp2)<span class="op">;</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>weatherStation<span class="op">.</span><span class="fu">setMeasurements</span>(<span class="dv">20</span><span class="op">,</span> <span class="fl">0.8</span><span class="op">,</span> <span class="dv">1013</span>)<span class="op">;</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a><span class="co">// Weather App 1 received update:</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a><span class="co">// Temperature: 20</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="co">// Humidity: 0.8</span></span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="co">// Pressure: 1013</span></span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a><span class="co">// Weather App 2 received update:</span></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="co">// Temperature: 20</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a><span class="co">// Humidity: 0.8</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="co">// Pressure: 1013</span></span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a>weatherStation<span class="op">.</span><span class="fu">unsubscribe</span>(weatherApp1)<span class="op">;</span></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>weatherStation<span class="op">.</span><span class="fu">setMeasurements</span>(<span class="dv">22</span><span class="op">,</span> <span class="fl">0.7</span><span class="op">,</span> <span class="dv">1015</span>)<span class="op">;</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="co">// Weather App 2 received update:</span></span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a><span class="co">// Temperature: 22</span></span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a><span class="co">// Humidity: 0.7</span></span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="co">// Pressure: 1015</span></span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-3---observer-pattern" class="level3">
+<h3 class="anchored" data-anchor-id="example-3---observer-pattern">Example 3 - Observer Pattern</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StockMarketDataProvider {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>() {</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">stockPrices</span> <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subscribe</span>(observer) {</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">push</span>(observer)<span class="op">;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unsubscribe</span>(observer) {</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span> <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">filter</span>(obs <span class="kw">=&gt;</span> obs <span class="op">!==</span> observer)<span class="op">;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">notify</span>() {</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">observers</span><span class="op">.</span><span class="fu">forEach</span>(observer <span class="kw">=&gt;</span> {</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>      observer<span class="op">.</span><span class="fu">update</span>(<span class="kw">this</span><span class="op">.</span><span class="at">stockPrices</span>)<span class="op">;</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">updateStockPrices</span>(stockPrices) {</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">stockPrices</span> <span class="op">=</span> stockPrices<span class="op">;</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">notify</span>()<span class="op">;</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StockTrader {</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(name) {</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update</span>(stockPrices) {</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">name</span><span class="sc">}</span><span class="vs"> received update:`</span>)<span class="op">;</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(stockPrices)<span class="op">;</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> stockMarketDataProvider <span class="op">=</span> <span class="kw">new</span> <span class="fu">StockMarketDataProvider</span>()<span class="op">;</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> stockTrader1 <span class="op">=</span> <span class="kw">new</span> <span class="fu">StockTrader</span>(<span class="st">"Stock Trader 1"</span>)<span class="op">;</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> stockTrader2 <span class="op">=</span> <span class="kw">new</span> <span class="fu">StockTrader</span>(<span class="st">"Stock Trader 2"</span>)<span class="op">;</span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>stockMarketDataProvider<span class="op">.</span><span class="fu">subscribe</span>(stockTrader1)<span class="op">;</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>stockMarketDataProvider<span class="op">.</span><span class="fu">subscribe</span>(stockTrader2)<span class="op">;</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>stockMarketDataProvider<span class="op">.</span><span class="fu">updateStockPrices</span>({</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AAPL"</span><span class="op">:</span> <span class="fl">132.12</span><span class="op">,</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>  <span class="st">"GOOG"</span><span class="op">:</span> <span class="fl">1231.33</span><span class="op">,</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AMZN"</span><span class="op">:</span> <span class="fl">3221.51</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co">// Stock Trader 1 received update:</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a><span class="co">// {</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="co">//   "AAPL": 132.12,</span></span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a><span class="co">//   "GOOG": 1231.33,</span></span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="co">//   "AMZN": 3221.51</span></span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a><span class="co">// }</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a><span class="co">// Stock Trader 2 received update:</span></span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a><span class="co">// {</span></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="co">//   "AAPL": 132.12,</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="visitor-pattern" class="level2">
+<h2 class="anchored" data-anchor-id="visitor-pattern">Visitor Pattern</h2>
+<p>The Visitor pattern is a behavioral design pattern that separates an algorithm from an object structure it operates on. It allows adding new behaviors to existing objects, without changing the objects themselves.</p>
+<p>The Visitor pattern defines a new operation to an existing object structure by defining a new class, called the visitor. The visitor class contains the algorithm to be executed and operates on the elements of the object structure, without changing the classes of the elements.</p>
+<p>An example of the Visitor pattern in real life is a tax inspector visiting different companies. The tax inspector doesn’t change the companies, but inspects them to calculate the tax they owe.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Item {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">price</span> <span class="op">=</span> price<span class="op">;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accept</span>(visitor) {</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    visitor<span class="op">.</span><span class="fu">visit</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Book <span class="kw">extends</span> Item {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price<span class="op">,</span> isbn) {</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(price)<span class="op">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">isbn</span> <span class="op">=</span> isbn<span class="op">;</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DVD <span class="kw">extends</span> Item {</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price<span class="op">,</span> length) {</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>(price)<span class="op">;</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">length</span> <span class="op">=</span> length<span class="op">;</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TaxVisitor {</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visit</span>(item) {</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (item <span class="kw">instanceof</span> Book) {</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>      item<span class="op">.</span><span class="at">price</span> <span class="op">=</span> item<span class="op">.</span><span class="at">price</span> <span class="op">*</span> <span class="fl">1.05</span><span class="op">;</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (item <span class="kw">instanceof</span> DVD) {</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>      item<span class="op">.</span><span class="at">price</span> <span class="op">=</span> item<span class="op">.</span><span class="at">price</span> <span class="op">*</span> <span class="fl">1.1</span><span class="op">;</span></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> book <span class="op">=</span> <span class="kw">new</span> <span class="fu">Book</span>(<span class="dv">10</span><span class="op">,</span> <span class="dv">123456</span>)<span class="op">;</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> dvd <span class="op">=</span> <span class="kw">new</span> <span class="fu">DVD</span>(<span class="dv">20</span><span class="op">,</span> <span class="dv">120</span>)<span class="op">;</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> taxVisitor <span class="op">=</span> <span class="kw">new</span> <span class="fu">TaxVisitor</span>()<span class="op">;</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>book<span class="op">.</span><span class="fu">accept</span>(taxVisitor)<span class="op">;</span></span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>dvd<span class="op">.</span><span class="fu">accept</span>(taxVisitor)<span class="op">;</span></span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(book<span class="op">.</span><span class="at">price</span>)<span class="op">;</span> <span class="co">// 10.5</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(dvd<span class="op">.</span><span class="at">price</span>)<span class="op">;</span> <span class="co">// 22</span></span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Another real-world example of the Visitor pattern in JavaScript could be a travel agency website. The website allows customers to book various travel packages such as flight, hotel, and rental car.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TravelPackage {</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">accept</span>(visitor) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    visitor<span class="op">.</span><span class="fu">visit</span>(<span class="kw">this</span>)<span class="op">;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Flight <span class="kw">extends</span> TravelPackage {</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price<span class="op">,</span> departure<span class="op">,</span> arrival) {</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>()<span class="op">;</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">price</span> <span class="op">=</span> price<span class="op">;</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">departure</span> <span class="op">=</span> departure<span class="op">;</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">arrival</span> <span class="op">=</span> arrival<span class="op">;</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Hotel <span class="kw">extends</span> TravelPackage {</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price<span class="op">,</span> name<span class="op">,</span> rating) {</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>()<span class="op">;</span></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">price</span> <span class="op">=</span> price<span class="op">;</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">name</span> <span class="op">=</span> name<span class="op">;</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">rating</span> <span class="op">=</span> rating<span class="op">;</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> RentalCar <span class="kw">extends</span> TravelPackage {</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">constructor</span>(price<span class="op">,</span> make<span class="op">,</span> model) {</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">super</span>()<span class="op">;</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">price</span> <span class="op">=</span> price<span class="op">;</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">make</span> <span class="op">=</span> make<span class="op">;</span></span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">model</span> <span class="op">=</span> model<span class="op">;</span></span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TotalCostVisitor {</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visit</span>(travelPackage) {</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (travelPackage <span class="kw">instanceof</span> Flight) {</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">totalCost</span> <span class="op">+=</span> travelPackage<span class="op">.</span><span class="at">price</span><span class="op">;</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (travelPackage <span class="kw">instanceof</span> Hotel) {</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">totalCost</span> <span class="op">+=</span> travelPackage<span class="op">.</span><span class="at">price</span><span class="op">;</span></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (travelPackage <span class="kw">instanceof</span> RentalCar) {</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>      <span class="kw">this</span><span class="op">.</span><span class="at">totalCost</span> <span class="op">+=</span> travelPackage<span class="op">.</span><span class="at">price</span><span class="op">;</span></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> flight <span class="op">=</span> <span class="kw">new</span> <span class="fu">Flight</span>(<span class="dv">100</span><span class="op">,</span> <span class="st">"New York"</span><span class="op">,</span> <span class="st">"London"</span>)<span class="op">;</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> hotel <span class="op">=</span> <span class="kw">new</span> <span class="fu">Hotel</span>(<span class="dv">150</span><span class="op">,</span> <span class="st">"Grand Hotel"</span><span class="op">,</span> <span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> car <span class="op">=</span> <span class="kw">new</span> <span class="fu">RentalCar</span>(<span class="dv">50</span><span class="op">,</span> <span class="st">"Toyota"</span><span class="op">,</span> <span class="st">"Camry"</span>)<span class="op">;</span></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalCostVisitor <span class="op">=</span> <span class="kw">new</span> <span class="fu">TotalCostVisitor</span>()<span class="op">;</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>totalCostVisitor<span class="op">.</span><span class="at">totalCost</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>flight<span class="op">.</span><span class="fu">accept</span>(totalCostVisitor)<span class="op">;</span></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>hotel<span class="op">.</span><span class="fu">accept</span>(totalCostVisitor)<span class="op">;</span></span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>car<span class="op">.</span><span class="fu">accept</span>(totalCostVisitor)<span class="op">;</span></span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(totalCostVisitor<span class="op">.</span><span class="at">totalCost</span>)<span class="op">;</span> <span class="co">// 300</span></span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>
