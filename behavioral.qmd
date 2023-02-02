@@ -657,3 +657,629 @@ The template method pattern is an appropriate solution when you have an algorith
 5. You want to be able to add new functionality to a system without modifying existing code.
 
 In general, the template method pattern is a powerful tool for creating flexible, reusable, and maintainable code, and it can help to simplify complex systems by breaking them down into smaller, more manageable parts.
+
+
+
+# Message Passing Design
+
+The Message Passing Design Pattern is a software design pattern in which objects communicate with each other by sending and receiving messages. The message passing mechanism allows objects to send and receive data, triggers events, or request actions without the need for tight coupling or direct knowledge of the recipient's implementation. This allows for loose coupling between objects and promotes modularity, maintainability, and scalability in software systems.
+
+## Mediator 
+
+The Mediator Design Pattern is a behavioral design pattern that provides a centralized communication channel for objects to interact with each other in a decoupled way. In other words, objects don't communicate directly with each other, but through a mediator object., which acts as an intermediary. This can lead to more flexible and maintainable design by reducing the number of relationships between objects and promoting loose coupling.
+
+For instance: Imaine that you have a group of friends who want to play a game together. But instead of each person talking to each other directly, you want to have a leader who helps everyone communicate and play the game together. This leader is like a helper who makes sure that everyone is on the same page and that everyone is having fun. This is the same concept as the mediator design pattern.
+
+So, when one of your friends wants to tell the others about something, they tell the leader instead of telling each other directly. The leader then tells the rest of the friends about the message. This way, everyone can play the game together smoothly and on one gets left out. 
+
+In javaScript, this pattern can be implemented using an object that acts as a mediator, and that contains methods for registering and unregistering objects, as well as methods for sending and receiving messages. 
+
+```{.js}
+class User {
+    constructor(name)
+    {
+        this.name = name;
+        this.chatroom = null;
+    }
+
+    sendMessage(recipient, message, mediator)
+    {
+        mediator.sendMessage(this, recipient, message);
+    }
+}
+
+class ChatMediator()
+{
+    constructor()
+    {
+        this.users = {};
+    }
+
+    register(user)
+    {
+        this.users[user.name] = user;
+    }
+
+    send(sender, recipient, message)
+    {
+    if (this.users.includes(sender) && this.users.includes(recipient)) {
+      console.log(`${sender.name} sent message "${message}" to ${recipient.name}`);
+    } else {
+      console.log(`Error: either sender or recipient is not registered`);
+    }
+    }
+}
+
+const chatMediator = new ChatMediator();
+const userA = new User("User A");
+const userB = new User("User B");
+
+chatMediator.register(userA);
+chatMediator.register(userB);
+
+userA.sendMessage(userB, "Hello!", chatMediator);
+userB.sendMessage(userA, "Hi there!", chatMediator);
+
+```
+
+### Example 2 - Mediator 
+
+```{.js}
+class Airplane {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sendLocation(location, mediator) {
+    mediator.sendLocation(this, location);
+  }
+}
+
+class FlightControlCenter {
+  constructor() {
+    this.airplanes = [];
+  }
+
+  register(airplane) {
+    this.airplanes.push(airplane);
+  }
+
+  sendLocation(airplane, location) {
+    console.log(`${airplane.name} reported location: ${location}`);
+  }
+}
+
+const flightControlCenter = new FlightControlCenter();
+const airplaneA = new Airplane("Airplane A");
+const airplaneB = new Airplane("Airplane B");
+
+flightControlCenter.register(airplaneA);
+flightControlCenter.register(airplaneB);
+
+airplaneA.sendLocation("37.788022, -122.399797", flightControlCenter);
+airplaneB.sendLocation("51.509865, -0.118092", flightControlCenter);
+
+// Output:
+// Airplane A reported location: 37.788022, -122.399797
+// Airplane B reported location: 51.509865,
+
+```
+
+### Example 3 - Mediator 
+
+```{.js}
+class Participant()
+{
+    constructor(name){
+        this.name = name;
+    }
+
+
+    joinConference(mediator) {
+        mediator.register(this);
+        console.log(`${this.name} joined the conference`);
+    }
+
+    leaveConference(mediator) {
+        mediator.unregister(this);
+        console.log(`${this.name} left the conference`);
+    }
+
+    receiveMessage(message, from) {
+        console.log(`${this.name} received message "${message}" from ${from.name}`);
+    }
+}
+
+class VideoConferencingSystem {
+  constructor() {
+    this.participants = [];
+  }
+
+  register(participant) {
+    this.participants.push(participant);
+  }
+
+  unregister(participant) {
+    this.participants = this.participants.filter(p => p !== participant);
+  }
+
+  sendMessage(message, from) {
+    this.participants.forEach(participant => {
+      if (participant !== from) {
+        participant.receiveMessage(message, from);
+      }
+    });
+  }
+}
+
+const videoConferencingSystem = new VideoConferencingSystem();
+const participantA = new Participant("Participant A");
+const participantB = new Participant("Participant B");
+const participantC = new Participant("Participant C");
+
+participantA.joinConference(videoConferencingSystem);
+participantB.joinConference(videoConferencingSystem);
+participantC.joinConference(videoConferencingSystem);
+
+participantA.sendMessage("Hello everyone!", videoConferencingSystem);
+participantB.sendMessage("Hi!", videoConferencingSystem);
+participantC.sendMessage("Greetings!", videoConferencingSystem);
+
+participantC.leaveConference(videoConferencingSystem);
+
+participantA.sendMessage("Bye!", videoConferencingSystem);
+participantB.sendMessage("Goodbye!", videoConferencingSystem);
+
+
+```
+## Chain of Responsibility 
+
+The Chain of Responsibility pattern is a design pattern where a request is passed through a chain of objects until one of them handles it. The objects in the chain are called "handlers".
+
+The Chain of Responsibility pattern is useful when you want to decouple the sender of a request from its receiver. It also allows you to add new handlers to the chain without changing the existing code.
+
+> Okay, let's pretend you are playing a game of passing a ball to your friends. The ball starts with you, then you pass it to your friend, who then passes it to another friend, and so on, until one of your friends catches the ball.
+
+> This is like the Chain of Responsibility pattern. The ball is like a request, and each of your friends is like a handler. The ball is passed from one friend to another until someone catches it and handles it.
+
+> So, in this pattern, the request is passed along a chain of objects, and each object gets a chance to handle the request. If an object can't handle it, it passes the request to the next object in the chain, until it is handled.
+
+
+### Example 1 - Chain of Responsibility 
+
+```{.js}
+
+class Request {
+  constructor(amount) {
+    this.amount = amount;
+  }
+}
+
+class Payment {
+  setNext(payment) {
+    this.next = payment;
+  }
+
+  handle(request) {
+    if (this.canHandle(request)) {
+      console.log(`${this.constructor.name} handled request of ${request.amount}`);
+    } else if (this.next) {
+      this.next.handle(request);
+    } else {
+      console.log("Request not handled");
+    }
+  }
+}
+
+class PayPal extends Payment {
+  canHandle(request) {
+    return request.amount < 100;
+  }
+}
+
+class Bank extends Payment {
+  canHandle(request) {
+    return request.amount >= 100 && request.amount < 1000;
+  }
+}
+
+class WesternUnion extends Payment {
+  canHandle(request) {
+    return request.amount >= 1000;
+  }
+}
+
+const paypal = new PayPal();
+const bank = new Bank();
+const westernUnion = new WesternUnion();
+
+paypal.setNext(bank);
+bank.setNext(westernUnion);
+
+const request1 = new Request(50);
+paypal.handle(request1); // PayPal handled request of 50
+
+const request2 = new Request(150);
+paypal.handle(request2); // Bank handled request of 150
+
+const request3 = new Request(2000);
+paypal.handle(request3); // WesternUnion handled request of 2000
+
+```
+
+### Example 2 - Chain of Responsibility 
+
+```{.js}
+
+class Request {
+  constructor(type) {
+    this.type = type;
+  }
+}
+
+class Approver {
+  setNext(approver) {
+    this.next = approver;
+  }
+
+  handle(request) {
+    if (this.canHandle(request)) {
+      console.log(`${this.constructor.name} handled request of type: ${request.type}`);
+    } else if (this.next) {
+      this.next.handle(request);
+    } else {
+      console.log("Request not handled");
+    }
+  }
+}
+
+class Manager extends Approver {
+  canHandle(request) {
+    return request.type === "leave";
+  }
+}
+
+class Director extends Approver {
+  canHandle(request) {
+    return request.type === "salary increase";
+  }
+}
+
+const manager = new Manager();
+const director = new Director();
+
+manager.setNext(director);
+
+const leaveRequest = new Request("leave");
+manager.handle(leaveRequest); // Manager handled request of type: leave
+
+const salaryIncreaseRequest = new Request("salary increase");
+manager.handle(salaryIncreaseRequest); // Director handled request of type: salary increase
+
+const otherRequest = new Request("other");
+manager.handle(otherRequest); // Request not handled
+
+
+```
+
+## Observer Pattern
+
+The Observer pattern is a design pattern where an object, called the subject, maintains a list of its dependents, called observers, and notifies them automatically of any changes to its state.
+
+A real-world example of the Observer pattern is a weather station. The weather station (subject) has a list of weather subscribers (observers). When the temperature, humidity or pressure changes, the weather station updates its measurements and notifies all its subscribers of the change. Each subscriber (e.g. a weather app, a TV channel) updates its display with the new information.
+
+Another example could be a stock market update system where a stock market data provider (subject) maintains a list of stock market subscribers (observers) such as stock market traders, brokers, and investors. When the stock market changes, the data provider updates its information and notifies all its subscribers of the changes. Each subscriber updates their stock portfolio and trading strategies based on the new information.
+
+
+```{.js}
+
+class Subject {
+  constructor() {
+    this.observers = [];
+  }
+
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  notify(data) {
+    this.observers.forEach(observer => observer.update(data));
+  }
+}
+
+class Observer {
+  constructor(name) {
+    this.name = name;
+  }
+
+  update(data) {
+    console.log(`${this.name} received data: ${data}`);
+  }
+}
+
+const subject = new Subject();
+
+const observer1 = new Observer("Observer 1");
+const observer2 = new Observer("Observer 2");
+const observer3 = new Observer("Observer 3");
+
+subject.subscribe(observer1);
+subject.subscribe(observer2);
+subject.subscribe(observer3);
+
+subject.notify("Hello World");
+// Observer 1 received data: Hello World
+// Observer 2 received data: Hello World
+// Observer 3 received data: Hello World
+
+subject.unsubscribe(observer2);
+subject.notify("Hello Again");
+// Observer 1 received data: Hello Again
+// Observer 3 received data: Hello Again
+
+```
+
+### Example 2 - Observer Pattern
+
+```{.js}
+class WeatherStation {
+  constructor() {
+    this.temperature = 0;
+    this.humidity = 0;
+    this.pressure = 0;
+    this.observers = [];
+  }
+
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  notify() {
+    this.observers.forEach(observer => {
+      observer.update(this.temperature, this.humidity, this.pressure);
+    });
+  }
+
+  setMeasurements(temperature, humidity, pressure) {
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.pressure = pressure;
+    this.notify();
+  }
+}
+
+class WeatherApp {
+  constructor(name) {
+    this.name = name;
+  }
+
+  update(temperature, humidity, pressure) {
+    console.log(`${this.name} received update:`);
+    console.log(`Temperature: ${temperature}`);
+    console.log(`Humidity: ${humidity}`);
+    console.log(`Pressure: ${pressure}`);
+  }
+}
+
+const weatherStation = new WeatherStation();
+const weatherApp1 = new WeatherApp("Weather App 1");
+const weatherApp2 = new WeatherApp("Weather App 2");
+
+weatherStation.subscribe(weatherApp1);
+weatherStation.subscribe(weatherApp2);
+
+weatherStation.setMeasurements(20, 0.8, 1013);
+// Weather App 1 received update:
+// Temperature: 20
+// Humidity: 0.8
+// Pressure: 1013
+// Weather App 2 received update:
+// Temperature: 20
+// Humidity: 0.8
+// Pressure: 1013
+
+weatherStation.unsubscribe(weatherApp1);
+
+weatherStation.setMeasurements(22, 0.7, 1015);
+// Weather App 2 received update:
+// Temperature: 22
+// Humidity: 0.7
+// Pressure: 1015
+
+
+```
+
+### Example 3 - Observer Pattern
+
+```{.js}
+class StockMarketDataProvider {
+  constructor() {
+    this.stockPrices = {};
+    this.observers = [];
+  }
+
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  notify() {
+    this.observers.forEach(observer => {
+      observer.update(this.stockPrices);
+    });
+  }
+
+  updateStockPrices(stockPrices) {
+    this.stockPrices = stockPrices;
+    this.notify();
+  }
+}
+
+class StockTrader {
+  constructor(name) {
+    this.name = name;
+  }
+
+  update(stockPrices) {
+    console.log(`${this.name} received update:`);
+    console.log(stockPrices);
+  }
+}
+
+const stockMarketDataProvider = new StockMarketDataProvider();
+const stockTrader1 = new StockTrader("Stock Trader 1");
+const stockTrader2 = new StockTrader("Stock Trader 2");
+
+stockMarketDataProvider.subscribe(stockTrader1);
+stockMarketDataProvider.subscribe(stockTrader2);
+
+stockMarketDataProvider.updateStockPrices({
+  "AAPL": 132.12,
+  "GOOG": 1231.33,
+  "AMZN": 3221.51
+});
+// Stock Trader 1 received update:
+// {
+//   "AAPL": 132.12,
+//   "GOOG": 1231.33,
+//   "AMZN": 3221.51
+// }
+// Stock Trader 2 received update:
+// {
+//   "AAPL": 132.12,
+
+```
+## Visitor Pattern
+
+The Visitor pattern is a behavioral design pattern that separates an algorithm from an object structure it operates on. It allows adding new behaviors to existing objects, without changing the objects themselves.
+
+The Visitor pattern defines a new operation to an existing object structure by defining a new class, called the visitor. The visitor class contains the algorithm to be executed and operates on the elements of the object structure, without changing the classes of the elements.
+
+An example of the Visitor pattern in real life is a tax inspector visiting different companies. The tax inspector doesn't change the companies, but inspects them to calculate the tax they owe.
+
+
+```{.js}
+class Item {
+  constructor(price) {
+    this.price = price;
+  }
+
+  accept(visitor) {
+    visitor.visit(this);
+  }
+}
+
+class Book extends Item {
+  constructor(price, isbn) {
+    super(price);
+    this.isbn = isbn;
+  }
+}
+
+class DVD extends Item {
+  constructor(price, length) {
+    super(price);
+    this.length = length;
+  }
+}
+
+class TaxVisitor {
+  visit(item) {
+    if (item instanceof Book) {
+      item.price = item.price * 1.05;
+    } else if (item instanceof DVD) {
+      item.price = item.price * 1.1;
+    }
+  }
+}
+
+const book = new Book(10, 123456);
+const dvd = new DVD(20, 120);
+
+const taxVisitor = new TaxVisitor();
+
+book.accept(taxVisitor);
+dvd.accept(taxVisitor);
+
+console.log(book.price); // 10.5
+console.log(dvd.price); // 22
+
+
+```
+
+Another real-world example of the Visitor pattern in JavaScript could be a travel agency website. The website allows customers to book various travel packages such as flight, hotel, and rental car.
+
+
+```{.js}
+
+class TravelPackage {
+  accept(visitor) {
+    visitor.visit(this);
+  }
+}
+
+class Flight extends TravelPackage {
+  constructor(price, departure, arrival) {
+    super();
+    this.price = price;
+    this.departure = departure;
+    this.arrival = arrival;
+  }
+}
+
+class Hotel extends TravelPackage {
+  constructor(price, name, rating) {
+    super();
+    this.price = price;
+    this.name = name;
+    this.rating = rating;
+  }
+}
+
+class RentalCar extends TravelPackage {
+  constructor(price, make, model) {
+    super();
+    this.price = price;
+    this.make = make;
+    this.model = model;
+  }
+}
+
+class TotalCostVisitor {
+  visit(travelPackage) {
+    if (travelPackage instanceof Flight) {
+      this.totalCost += travelPackage.price;
+    } else if (travelPackage instanceof Hotel) {
+      this.totalCost += travelPackage.price;
+    } else if (travelPackage instanceof RentalCar) {
+      this.totalCost += travelPackage.price;
+    }
+  }
+}
+
+const flight = new Flight(100, "New York", "London");
+const hotel = new Hotel(150, "Grand Hotel", 4);
+const car = new RentalCar(50, "Toyota", "Camry");
+
+const totalCostVisitor = new TotalCostVisitor();
+totalCostVisitor.totalCost = 0;
+
+flight.accept(totalCostVisitor);
+hotel.accept(totalCostVisitor);
+car.accept(totalCostVisitor);
+
+console.log(totalCostVisitor.totalCost); // 300
+
+
+```
